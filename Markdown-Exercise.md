@@ -9,7 +9,7 @@ I study General Engineering at Montgomery College. Outside of class I build and 
 
 ### Why Engineering
 
-The **hardware** side is what holds my interest. Getting into a new subject is the hard part not the subject itself.
+The **hardware** side is what holds my interest. Getting into a new subject is the hard part not the subject *itself*.
 
 ## Lists
 
