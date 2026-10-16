@@ -1,0 +1,64 @@
+# Data 201 - Project 1: Classification in Practice
+
+Classifying whether a breast mass is a malignant or benign mass based on 30 predictors measured from the digitized image of a fine needle aspiration biopsy of that mass.
+
+**Noah Baugh | DATA 201 | Fall 2026**
+
+## The problem
+
+An image of the mass is made, digitized and 30 features extracted from the cell nuclei within. The questions is whether these features are sufficient for classification of the mass into one of two classes and what type of classifier to use.
+
+The two types of error have very different cost. False positive means an unnecessary biopsy, while a false negative means a diagnosis of healthy while actually the woman has cancer. The former will correct itself while the latter will not, as there is no way to detect it. This difference affects all choices in this project.
+
+## The data
+
+Wisconsin Diagnostic Breast Cancer data, 569 masses with 30 numeric predictors each.
+
+- 357 benign, 212 malignant masses, hence 37.3% of cases are malignant
+- No missing values, no duplicated rows, no categorical predictors
+- Split into 75%/25%: 426 training and 143 test rows
+
+## What was done
+
+Four models were trained using the same training dataset with all 30 features: logistic regression, LDA, QDA and KNN. All four models use pipelines with preprocessing that includes scaling the features. It not only allows us to use KNN but also prevents any leakage of the test statistics into the training process.
+
+K for KNN was determined via 5-fold cross-validation on the training set only, with odd numbers ranging from 1 to 31 being considered.
+
+## Results
+
+Performance of classifiers on the test set at 0.50 threshold:
+
+| Model | Accuracy | Precision | Recall | Specificity | F1 | ROC-AUC |
+|---|---|---|---|---|---|---|
+| Logistic Regression | 0.9650 | 0.9800 | **0.9245** | 0.9889 | 0.9515 | **0.9962** |
+| LDA | 0.9650 | 1.0000 | 0.9057 | 1.0000 | 0.9505 | 0.9960 |
+| QDA | 0.9441 | 0.9592 | 0.8868 | 0.9778 | 0.9216 | 0.9945 |
+| KNN (K=3) | 0.9580 | 1.0000 | 0.8868 | 1.0000 | 0.9400 | 0.9881 |
+
+Number of missed cancer tumors in the test set of 53 tumors: Logistic regression 4, LDA 5, QDA 6, KNN 6.
+
+## Main finding
+
+**Logistic regression using 0.30 cutoff instead of the traditional 0.50 cutoff.**
+
+The fact that logistic regression performs as well as LDA in terms of accuracy at 96.5%, but makes different errors, is the best evidence in this project for the fact that accuracy is not what we should be focusing on here. Logistic regression makes one less cancer mistake at the expense of one extra false positive, but in the case of this application, that is a price worth paying.
+
+Lowering the cutoff from 0.50 to 0.30 reduces the cancer errors from 4 to 2, whereas the number of false alarms remains unchanged at 1. This increase is for free. Neither the model nor the fit have been altered in any way.
+
+## Limitation
+
+The test set contains only 53 malignant tumors. As the difference between logistic regression and LDA amounts to one observation, the ranking of the methods under consideration is not well-defined even though the overall conclusion is robust.
+
+## Files
+
+| File | Contents |
+|---|---|
+| `Data201_Project1_Classification.ipynb` | Full analysis, Parts 1 through 7 |
+| `breast_cancer_wdbc.csv` | The dataset, 569 rows by 31 columns |
+| `README.md` | This file |
+
+## Running it
+
+Open the notebook in Google Colab and execute all cells. The data is loaded using `sklearn.datasets.load_breast_cancer`, so there is no need for file uploading. The CSV is provided for your convenience.
+
+Depends on numpy, pandas, matplotlib, and scikit-learn, which are pre-installed in Colab.
